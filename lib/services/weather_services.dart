@@ -3,9 +3,12 @@ import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:weatherapptask/models/weathermodal.dart';
+import 'package:weatherapptask/config/api_keys.dart';
+
 class WeatherService {
-  static const String _apiKey = 'e7f6720b0ff17400fb87c1eed0c6f972'; // OpenWeatherMap API key
   static const String _baseUrl = 'https://api.openweathermap.org/data/2.5';
+
+  String get _apiKey => ApiKeys.openWeatherApiKey;
 
   // Get current weather by city name
   Future<CurrentWeather> getCurrentWeatherByCity(String cityName) async {
@@ -24,6 +27,7 @@ class WeatherService {
       throw Exception('Error fetching weather data: $e');
     }
   }
+
   Future<CurrentWeather> getCurrentWeatherByCoordinates(double lat, double lon) async {
     try {
       final url = Uri.parse('$_baseUrl/weather?lat=$lat&lon=$lon&appid=$_apiKey&units=metric');
@@ -76,6 +80,7 @@ class WeatherService {
       throw Exception('Error fetching forecast data: $e');
     }
   }
+
   // user's current location
   Future<Position> getCurrentLocation() async {
     bool serviceEnabled;
@@ -101,6 +106,7 @@ class WeatherService {
       desiredAccuracy: LocationAccuracy.high,
     );
   }
+
   Future<String> getCityFromCoordinates(double lat, double lon) async {
     try {
       List<Placemark> placemarks = await placemarkFromCoordinates(lat, lon);
@@ -112,6 +118,7 @@ class WeatherService {
       return 'Unknown';
     }
   }
+
   String getWeatherIconUrl(String iconCode) {
     return 'https://openweathermap.org/img/wn/$iconCode@2x.png';
   }
